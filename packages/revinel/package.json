@@ -1,0 +1,77 @@
+{
+  "name": "revinel",
+  "version": "0.11.0",
+  "description": "Official JavaScript SDK for Revinel: fetch and track publisher ads, React hooks, and the advertiser tier selector.",
+  "keywords": [
+    "ad-server",
+    "ads",
+    "advertising",
+    "embed",
+    "headless",
+    "hooks",
+    "publisher",
+    "react",
+    "revinel",
+    "sdk",
+    "tier-selector"
+  ],
+  "homepage": "https://revinel.com/docs",
+  "bugs": "https://github.com/revinel/revinel-js/issues",
+  "license": "MIT",
+  "author": "Piotr Kulpinski",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/revinel/revinel-js.git",
+    "directory": "packages/revinel"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./react": {
+      "types": "./src/react/index.tsx",
+      "default": "./src/react/index.tsx"
+    },
+    "./browser": {
+      "types": "./src/browser/index.ts",
+      "default": "./src/browser/index.ts"
+    },
+    "./embeds": {
+      "types": "./src/embeds.ts",
+      "default": "./src/embeds.ts"
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "directory": "dist"
+  },
+  "scripts": {
+    "build": "tsdown && kodeks prepare-package && bun run sync:embed",
+    "sync:embed": "bun scripts/sync-embed.ts",
+    "check-types": "tsc --noEmit --project tsconfig.json"
+  },
+  "devDependencies": {
+    "@dirstack/kodeks": "1.9.2",
+    "@happy-dom/global-registrator": "^20.10.6",
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^19.2.17",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "tsdown": "^0.22.9",
+    "typescript": "^6.0.3"
+  },
+  "peerDependencies": {
+    "react": ">=18 <20"
+  },
+  "peerDependenciesMeta": {
+    "react": {
+      "optional": true
+    }
+  }
+}
