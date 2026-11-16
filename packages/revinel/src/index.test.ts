@@ -1,4 +1,4 @@
-import { describe, expect, it } from "bun:test"
+import { describe, expect, it, spyOn } from "bun:test"
 import { createRevinelClient, RevinelApiError } from "./index"
 
 const sampleAd = {
@@ -236,6 +236,56 @@ describe("createRevinelClient", () => {
     expect(calls).toEqual([
       { url: "https://api.revinel.test/v1/ads/ad_123/impressions", method: "POST" },
       { url: "https://api.revinel.test/v1/ads/ad_123/clicks", method: "POST" },
+    ])
+  })
+
+  it("skips tracking requests from a local page to a remote API", async () => {
+    const calls: string[] = []
+    // oxlint-disable-next-line func-style -- fetch stub typed via `typeof fetch`
+    const fetcher: typeof fetch = async url => {
+      calls.push(String(url))
+      return Response.json({ success: true })
+    }
+
+    const client = createRevinelClient({ workspaceId: "ws_openalternative", fetch: fetcher })
+    const info = spyOn(console, "info").mockImplementation(() => {})
+    const location = Object.getOwnPropertyDescriptor(globalThis, "location")
+
+    try {
+      for (const hostname of ["localhost", "app.localhost", "127.0.0.1", "192.168.1.20"]) {
+        Object.defineProperty(globalThis, "location", { value: { hostname }, configurable: true })
+
+        await expect(client.recordImpression("ad_123")).resolves.toEqual({ success: false })
+        await expect(client.recordClick("ad_123")).resolves.toEqual({ success: false })
+      }
+
+      Object.defineProperty(globalThis, "location", {
+        value: { hostname: "euroalternative.co" },
+        configurable: true,
+      })
+      await expect(client.recordImpression("ad_123")).resolves.toEqual({ success: true })
+      expect(info).toHaveBeenCalledTimes(1)
+
+      // A local API records local events, so the SDK still sends them.
+      Object.defineProperty(globalThis, "location", {
+        value: { hostname: "localhost" },
+        configurable: true,
+      })
+      const localClient = createRevinelClient({
+        workspaceId: "ws_openalternative",
+        apiUrl: "http://localhost:6271",
+        fetch: fetcher,
+      })
+      await expect(localClient.recordClick("ad_123")).resolves.toEqual({ success: true })
+    } finally {
+      if (location) Object.defineProperty(globalThis, "location", location)
+      else Reflect.deleteProperty(globalThis, "location")
+      info.mockRestore()
+    }
+
+    expect(calls).toEqual([
+      "https://api.revinel.com/v1/ads/ad_123/impressions",
+      "http://localhost:6271/v1/ads/ad_123/clicks",
     ])
   })
 

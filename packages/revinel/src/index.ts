@@ -1,3 +1,7 @@
+import { isLocalHostname } from "./local-hostname"
+
+export { isLocalHostname } from "./local-hostname"
+
 const DEFAULT_API_URL = "https://api.revinel.com"
 const DEFAULT_TIMEOUT_MS = 10_000
 
@@ -218,6 +222,16 @@ export class RevinelApiError extends Error {
   }
 }
 
+let hasLoggedLocalSkip = false
+
+/**
+ * Server-side callers have no `location`, so they never count as a local page.
+ */
+function isLocalPage(): boolean {
+  const hostname = globalThis.location?.hostname
+  return hostname !== undefined && isLocalHostname(hostname)
+}
+
 function trimTrailingSlash(value: string): string {
   return value.replace(/\/+$/, "")
 }
@@ -319,6 +333,11 @@ export function createRevinelClient({
   timeoutMs = DEFAULT_TIMEOUT_MS,
 }: RevinelClientOptions): RevinelClient {
   const baseUrl = trimTrailingSlash(apiUrl)
+
+  // The production API drops tracking events sent from a local page, so the
+  // SDK skips the request there. A local API still records them, which keeps
+  // tracking testable in development.
+  const isLocalApi = URL.canParse(baseUrl) && isLocalHostname(new URL(baseUrl).hostname)
   const fetcher = getFetch(customFetch)
 
   // Default every request to an abort-on-timeout signal so a black-holed
@@ -390,12 +409,22 @@ export function createRevinelClient({
   }
 
   function recordEvent(kind: "impression" | "click") {
-    return (adId: string, options: RevinelTrackOptions = {}): Promise<TrackResponse> =>
-      fetchJson<TrackResponse>(`/v1/ads/${encodeURIComponent(adId)}/${kind}s`, {
+    return async (adId: string, options: RevinelTrackOptions = {}): Promise<TrackResponse> => {
+      if (!isLocalApi && isLocalPage()) {
+        if (!hasLoggedLocalSkip) {
+          hasLoggedLocalSkip = true
+          console.info("Revinel: ad impressions and clicks are not tracked on local hosts.")
+        }
+
+        return { success: false }
+      }
+
+      return await fetchJson<TrackResponse>(`/v1/ads/${encodeURIComponent(adId)}/${kind}s`, {
         method: "POST",
         keepalive: true,
         ...options.request,
       })
+    }
   }
 
   const recordImpression = recordEvent("impression")
