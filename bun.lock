@@ -5,17 +5,17 @@
     "": {
       "name": "revinel-js",
       "devDependencies": {
-        "@dirstack/kodeks": "1.9.2",
+        "@underpin/config": "1.12.1",
       },
     },
     "packages/revinel": {
       "name": "revinel",
       "version": "0.11.0",
       "devDependencies": {
-        "@dirstack/kodeks": "1.9.2",
         "@happy-dom/global-registrator": "^20.10.6",
         "@testing-library/react": "^16.3.2",
         "@types/react": "^19.2.17",
+        "@underpin/config": "1.12.1",
         "react": "^19.2.7",
         "react-dom": "^19.2.7",
         "tsdown": "^0.22.9",
@@ -35,8 +35,6 @@
     "@babel/helper-validator-identifier": ["@babel/helper-validator-identifier@7.29.7", "", {}, "sha512-qehxGkRj55h/ff8EMaJ+cYhyaKlHIxqYDn682wQD7RNp9UujOQsHog2uS0r2vzr4pW+sXf90NeeayjcNaX3fFg=="],
 
     "@babel/runtime": ["@babel/runtime@7.29.14", "", {}, "sha512-Y5tqevQaUAZhhj82BpYMNC1ssvLQTVAfwKdm8iy8qwmhvC2/CpcAu8OC+QEtjM7pMk7knx83u1Qj8gzkicyelw=="],
-
-    "@dirstack/kodeks": ["@dirstack/kodeks@1.9.2", "", { "peerDependencies": { "@commitlint/cli": ">=21", "@commitlint/config-conventional": ">=21", "conventional-changelog-conventionalcommits": ">=10", "eslint-plugin-better-tailwindcss": ">=4", "lefthook": ">=2", "oxfmt": ">=0.58", "oxlint": ">=1.73", "semantic-release": ">=25", "typescript": ">=5" }, "optionalPeers": ["@commitlint/cli", "@commitlint/config-conventional", "conventional-changelog-conventionalcommits", "eslint-plugin-better-tailwindcss", "lefthook", "oxfmt", "oxlint", "semantic-release", "typescript"], "bin": { "kodeks": "dist/cli/kodeks.js" } }, "sha512-hUI0nnkGgPpmrOrcor/uNOrLR15pmho37nNPRBUL20J/8LZAbp6q0i7oq1x/xleckmj2yd7KGetl1ZbRYQSw3g=="],
 
     "@emnapi/core": ["@emnapi/core@2.0.0-beta.2", "", { "dependencies": { "@emnapi/wasi-threads": "2.2.0", "tslib": "^2.4.0" } }, "sha512-MzCVoWtcg4Pm2B3je5mMvYMvj3MmBKw+fU7vbsJc9/iT8ip6/eYIHo/Dsm/mr+wsHB6SEyJDuxB09Yy6r/8+4A=="],
 
@@ -101,6 +99,8 @@
     "@types/whatwg-mimetype": ["@types/whatwg-mimetype@3.0.2", "", {}, "sha512-c2AKvDT8ToxLIOUlN51gTiHXflsfIFisS4pO7pDPoKouJCESkhZnEy623gwP9laCy5lnLDAw1vAzu2vM2YLOrA=="],
 
     "@types/ws": ["@types/ws@8.18.2", "", { "dependencies": { "@types/node": "*" } }, "sha512-67MQl+fpWKVTT1NYdnmo3U4sc/xPo/zQBncVnI74qmQa0z/b+1g6iYqNmGCPbxO+zz2aklb08a0oHfegiVd0/w=="],
+
+    "@underpin/config": ["@underpin/config@1.12.1", "", { "peerDependencies": { "@commitlint/cli": ">=21", "@commitlint/config-conventional": ">=21", "conventional-changelog-conventionalcommits": ">=10", "eslint-plugin-better-tailwindcss": ">=4", "lefthook": ">=2", "oxfmt": ">=0.58", "oxlint": ">=1.73", "semantic-release": ">=25", "typescript": ">=5" }, "optionalPeers": ["@commitlint/cli", "@commitlint/config-conventional", "conventional-changelog-conventionalcommits", "eslint-plugin-better-tailwindcss", "lefthook", "oxfmt", "oxlint", "semantic-release", "typescript"], "bin": { "kodeks": "bin/underpin.js", "underpin": "bin/underpin.js" } }, "sha512-fMmo1g5b9kajSyRDH8YXrSwOKeaqAzMshskSLL+dXP+OmwRzh4oMHRtpLPtS+P0/etFG13aA+X858f2QD7OhzA=="],
 
     "@yuku-codegen/binding-android-arm64": ["@yuku-codegen/binding-android-arm64@0.8.7", "", { "os": "android", "cpu": "arm64" }, "sha512-C/0zV5IhgVdYhGJTwrY0v8dknxlhiKwtVJkMUaexu9/QvRmzlV4vfU3hZlUSgqc2BxQHntL1mCVbDq8j0FRFDw=="],
 

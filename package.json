@@ -9,7 +9,7 @@
     "build": "bun run --filter revinel build"
   },
   "devDependencies": {
-    "@dirstack/kodeks": "1.9.2"
+    "@underpin/config": "1.12.1"
   },
   "packageManager": "bun@1.4.4"
 }
